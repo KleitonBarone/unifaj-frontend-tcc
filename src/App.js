@@ -1,16 +1,17 @@
 import React from "react";
 import Home from "./components/Home";
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+
+import "./index.css";
+import Routes from "./routes";
+import store from "./store";
+import { Provider } from "react-redux";
 
 function App() {
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline/>
-      <Home />
-    </ThemeProvider>
+        <Provider store={store}>
+          <Routes />
+        </Provider>
   );
 }
 

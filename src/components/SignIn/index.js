@@ -12,6 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useHistory } from "react-router-dom";
 
 
 function Copyright() {
@@ -53,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const handlerLogar = () => {
+    history.push('/admin/dashboard')
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -97,26 +103,21 @@ export default function SignIn() {
             variant="contained"
             color="primary"
             className={classes.submit}
-            
+            onClick={handlerLogar}
           >
             Entrar
           </Button>
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
+              <Link href="/inscrever" variant="body2">
+                {"Não possui conta ? cadastre-se"}
               </Link>
             </Grid>
           </Grid>
         </form>
       </div>
       <Box mt={8}>
-        <Copyright />
+     
       </Box>
     </Container>
   );
