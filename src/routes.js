@@ -21,7 +21,7 @@ function Routes() {
         <Route path="/inscrever" component={SignUp} />
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/admin" component={Admin} />
-        <Redirect from="/" to="/admin/dashboard" />
+        <Route path="/" component={Home} />
       </Switch>
     </BrowserRouter>
   );
