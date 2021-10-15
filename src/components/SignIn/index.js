@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,7 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { useHistory } from "react-router-dom";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../slices/auth'
 
 function Copyright() {
   return (
@@ -55,9 +56,32 @@ const useStyles = makeStyles((theme) => ({
 export default function SignIn() {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch()
+  const state = useSelector(state=>state)
 
-  const handlerLogar = () => {
-    history.push('/admin/dashboard')
+  let [userInfo,setUserInfo] = useState({
+    email: '',
+    password:''
+  })
+
+  const inputUserInfo = (event) => {
+    setUserInfo((state) => ({...state,[event.target.name]: event.target.value}))
+  }
+
+  const handlerLogar = (e) => {
+    e.preventDefault()
+    
+    fetch("http://localhost:3001/auth/login",{
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(userInfo)
+    }).then(response => console.log(response.json().then(data =>{ 
+      dispatch(login(data))
+      console.log(state)
+      history.push('/admin/dashboard')
+    }))).catch(err => console.log(err))
+
+    
   }
 
   return (
@@ -81,6 +105,7 @@ export default function SignIn() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={(event) => inputUserInfo(event)}
           />
           <TextField
             variant="outlined"
@@ -92,6 +117,7 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={(event) => inputUserInfo(event)}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}

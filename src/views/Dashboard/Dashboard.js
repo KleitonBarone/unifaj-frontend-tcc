@@ -40,13 +40,17 @@ import {
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+  const { auth } = useSelector(state=>state)
+  console.log(auth.email)
   return (
     <div>
+      <p>{auth.email}</p>
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
