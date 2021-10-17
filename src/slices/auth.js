@@ -19,11 +19,22 @@ export const authSlice = createSlice({
       state.email = payload.email;
       state.name = payload.name;
       state.token = payload.token;
-
-      console.log(state)
+      console.log(state.isLoggedIn)
+      localStorage.setItem("IS_LOGGED",state.isLoggedIn)
+      localStorage.setItem("EMAIL",state.email)
+      localStorage.setItem("USERNAME",state.name)
+      localStorage.setItem("USER_TYPE",state.userType)
     },
     logout: (state) => {
       state.isLoggedIn = false;
+      state.email = "";
+      state.name = "";
+      state.token = "";
+
+      localStorage.removeItem("IS_LOGGED")
+      localStorage.removeItem("EMAIL")
+      localStorage.removeItem("USERNAME")
+      localStorage.removeItem("USER_TYPE")
     },
   },
 });

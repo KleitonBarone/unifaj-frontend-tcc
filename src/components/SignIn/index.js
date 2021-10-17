@@ -71,7 +71,7 @@ export default function SignIn() {
   const handlerLogar = (e) => {
     e.preventDefault()
     
-    fetch("http://localhost:3001/auth/login",{
+    fetch("https://backend-estudar-tcc.herokuapp.com/auth/login",{
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(userInfo)

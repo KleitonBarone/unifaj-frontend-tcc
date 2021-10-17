@@ -10,8 +10,12 @@ import Dashboard from "./components/Dashboard";
 import Admin from "./layouts/Admin";
 
 import "./assets/css/material-dashboard-react.css?v=1.10.0";
+import { useSelector } from "react-redux";
+import PrivateRoute from "privateRoute";
 
 function Routes() {
+  const state = useSelector(state=>state)
+
   return (
     <BrowserRouter>
       <Switch>
@@ -19,7 +23,7 @@ function Routes() {
         <Route path="/profile" component={Profile} />
         <Route path="/login" component={SignIn} />
         <Route path="/inscrever" component={SignUp} />
-        <Route path="/dashboard" component={Dashboard} />
+        <PrivateRoute exact path="/admin/dashboard" component={Admin} auth={localStorage.getItem("IS_LOGGED")}/>
         <Route path="/admin" component={Admin} />
         <Route path="/" component={Home} />
       </Switch>

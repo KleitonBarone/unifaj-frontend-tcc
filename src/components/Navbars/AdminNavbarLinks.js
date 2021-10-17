@@ -22,14 +22,15 @@ import Button from "components/CustomButtons/Button.js";
 import styles from "assets/jss/material-dashboard-react/components/headerLinksStyle.js";
 
 import { useHistory } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../slices/auth";
 
 const useStyles = makeStyles(styles);
-
-
 
 export default function AdminNavbarLinks() {
   const history = useHistory();
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [openNotification, setOpenNotification] = React.useState(null);
   const [openProfile, setOpenProfile] = React.useState(null);
   const handleClickNotification = (event) => {
@@ -54,6 +55,7 @@ export default function AdminNavbarLinks() {
   };
 
   const handleLogout = () => {
+    dispatch(logout());
     history.push("/login");
   }
   return (

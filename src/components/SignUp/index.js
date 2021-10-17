@@ -14,6 +14,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import './signup.css';
 //import * as yup from 'yup';
 import YouTube from '@material-ui/icons/YouTube';
 import { Radio } from '@material-ui/core';
@@ -60,6 +61,9 @@ export default function SignUp() {
   //   city: yup.string().required(),
   //   country: yup.string().required()
   // })
+
+  let [errors,setErros] = useState([])
+
   let [userInfo,setUserInfo] = useState({
     firstName: '',
     lastName: '',
@@ -77,17 +81,42 @@ export default function SignUp() {
   const inputUserInfo = (event) => {
     console.log(event.target.name)
     console.log(event.target.value)
+    
     setUserInfo((state) => ({...state,[event.target.name]: event.target.value}))
   }
 
   const registerUser = (event) =>{
     event.preventDefault()
-    console.log(userInfo["type"])
-    fetch("https://backend-estudar-tcc.herokuapp.com/"+userInfo["type"],{
-      method: "POST",
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(userInfo)
-    }).then(response => console.log(response.json().then(data => console.log(data)))).catch(err => console.log(err))
+    let hasError = false;
+    setErros([])
+    if(userInfo["firstName"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"Nome deve ser preenchido"}]))
+    }
+    if(userInfo["lastName"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"Sobrenome deve ser preenchido"}]))
+    }
+    if(userInfo["email"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"Email deve ser preenchida"}]))
+    }
+    if(userInfo["type"] == '') {
+      hasError = true
+      setErros((state) =>([...state,{value:"Tipo do usuário deve ser informado"}]))
+    }
+    if(userInfo["password"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"Senha deve ser preenchido"}]))
+    }
+
+    if(!hasError) {
+      fetch("https://backend-estudar-tcc.herokuapp.com/"+userInfo["type"],{
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(userInfo)
+      }).then(response => console.log(response.json().then(data => console.log(data)))).catch(err => console.log(err))  
+    }
   }
 
   return (
@@ -100,6 +129,9 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Cadastrar-se
         </Typography>
+        {errors.map(err =>{
+          return <div className="error-box">{err["value"]}</div>
+        })}
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
