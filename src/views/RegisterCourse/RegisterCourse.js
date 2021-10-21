@@ -15,6 +15,7 @@ import Container from '@material-ui/core/Container';
 import { useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../../slices/auth'
+import { Radio } from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -53,102 +54,114 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function RegisterCourse() {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch()
   const state = useSelector(state=>state)
 
   let [errors,setErros] = useState([])
-  let [userInfo,setUserInfo] = useState({
-    email: '',
-    password:''
+  let [courseInfo,setCourseInfo] = useState({
+    name: '',
+    category:0,
+    dateTime:'',
+    link:'',
+    instructor:{}
   })
 
-  const inputUserInfo = (event) => {
-    setUserInfo((state) => ({...state,[event.target.name]: event.target.value}))
+  const inputCourseInfo = (event) => {
+    if(event.target.name == "category") {
+        event.target.value = parseInt(event.target.value)
+    }
+    setCourseInfo((state) => ({...state,[event.target.name]: event.target.value}))
   }
 
-  const handlerLogar = (e) => {
+  const handlerRegisterCourse = (e) => {
     e.preventDefault()
     
-    fetch("https://backend-estudar-tcc.herokuapp.com/auth/login",{
+    fetch("http://localhost:3001/courses/"+localStorage.getItem("EMAIL"),{
       method: "POST",
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(userInfo)
+      body: JSON.stringify(courseInfo)
     }).then(response =>response.json().then(data =>{ 
-      if(data["statusCode"] != 400) {
-        dispatch(login(data))
-        console.log(state)
-        history.push('/admin/dashboard')
-      }else {
-        setErros([...errors,{value: data["message"]}])
-      }
-
+        console.log(data)
     }))
-
-    
   }
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Entrar
-        </Typography>
         {errors.map(err =>{
           return <div className="error-box">{err["value"]}</div>
         })}
         <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Endereço de e-mail"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={(event) => inputUserInfo(event)}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Senha"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={(event) => inputUserInfo(event)}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Lembrar-me"
-          />
+        <Grid container spacing={2}>
+            <Grid item xs={12} sm={12}>
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="name"
+                label="Titulo"
+                name="name"
+                autoComplete="name"
+                autoFocus
+                onChange={(event) => inputCourseInfo(event)}
+            />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+                <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="link"
+                label="Link"
+                name="link"
+                autoComplete="link"
+                autoFocus
+                onChange={(event) => inputCourseInfo(event)}
+                 />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+                <TextField
+                type="date"
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="link"
+                name="link"
+                autoComplete="link"
+                autoFocus
+                onChange={(event) => inputCourseInfo(event)}
+                 />
+            </Grid>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Radio value="0" color="primary" name="type" onChange={inputCourseInfo}/>}
+                label="Curso"
+                name="category"
+              />
+              <FormControlLabel
+                control={<Radio value="1" color="primary" name="type" onChange={inputCourseInfo}/>}
+                label="Palestra"
+                name="category"
+              />
+            </Grid>
+         </Grid>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handlerLogar}
+            onClick={handlerRegisterCourse}
           >
-            Entrar
+            Cadastrar
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link href="/inscrever" variant="body2">
-                {"Não possui conta ? cadastre-se"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={8}>

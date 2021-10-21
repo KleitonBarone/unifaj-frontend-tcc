@@ -19,6 +19,7 @@ export const authSlice = createSlice({
       state.email = payload.email;
       state.name = payload.name;
       state.token = payload.token;
+      state.userType = payload.userType
       console.log(state.isLoggedIn)
       localStorage.setItem("IS_LOGGED",state.isLoggedIn)
       localStorage.setItem("EMAIL",state.email)

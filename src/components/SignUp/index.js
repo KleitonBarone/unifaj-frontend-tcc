@@ -18,6 +18,9 @@ import './signup.css';
 //import * as yup from 'yup';
 import YouTube from '@material-ui/icons/YouTube';
 import { Radio } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from 'slices/auth';
+import { useHistory } from 'react-router';
 
 function Copyright() {
   return (
@@ -61,7 +64,8 @@ export default function SignUp() {
   //   city: yup.string().required(),
   //   country: yup.string().required()
   // })
-
+  const history = useHistory();
+  const dispatch = useDispatch()
   let [errors,setErros] = useState([])
 
   let [userInfo,setUserInfo] = useState({
@@ -115,7 +119,23 @@ export default function SignUp() {
         method: "POST",
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(userInfo)
-      }).then(response => console.log(response.json().then(data => console.log(data)))).catch(err => console.log(err))  
+      }).then(response => console.log(response.json().then(data =>{
+        data["password"] = userInfo["password"]
+        console.log(data)
+        fetch("https://backend-estudar-tcc.herokuapp.com/auth/login",{
+          method: "POST",
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        }).then(response =>response.json().then(data =>{ 
+          if(data["statusCode"] != 400) {
+            dispatch(login(data))
+            history.push('/admin/dashboard')
+          }else {
+            setErros([...errors,{value: data["message"]}])
+          }
+    
+        }))
+      }))).catch(err => console.log(err))  
     }
   }
 
