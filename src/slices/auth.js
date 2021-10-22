@@ -16,6 +16,7 @@ export const authSlice = createSlice({
       const { payload } = param
       console.log(payload)
       state.isLoggedIn = true;
+      state.userId = payload.userId;
       state.email = payload.email;
       state.name = payload.name;
       state.token = payload.token;
@@ -25,6 +26,7 @@ export const authSlice = createSlice({
       localStorage.setItem("EMAIL",state.email)
       localStorage.setItem("USERNAME",state.name)
       localStorage.setItem("USER_TYPE",state.userType)
+      localStorage.setItem("USER_ID",state.userId)
     },
     logout: (state) => {
       state.isLoggedIn = false;
@@ -36,6 +38,7 @@ export const authSlice = createSlice({
       localStorage.removeItem("EMAIL")
       localStorage.removeItem("USERNAME")
       localStorage.removeItem("USER_TYPE")
+      localStorage.removeItem("USER_ID")
     },
   },
 });

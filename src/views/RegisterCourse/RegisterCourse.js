@@ -79,12 +79,12 @@ export default function RegisterCourse() {
   const handlerRegisterCourse = (e) => {
     e.preventDefault()
     
-    fetch("http://localhost:3001/courses/"+localStorage.getItem("EMAIL"),{
+    fetch("https://backend-estudar-tcc.herokuapp.com/courses/"+localStorage.getItem("USER_ID"),{
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(courseInfo)
     }).then(response =>response.json().then(data =>{ 
-        console.log(data)
+      history.push('/admin/dashboard')
     }))
   }
 
@@ -127,14 +127,28 @@ export default function RegisterCourse() {
             </Grid>
             <Grid item xs={12} sm={12}>
                 <TextField
+                variant="outlined"
+                margin="normal"
+                required
+                fullWidth
+                id="description"
+                label="Descricao"
+                name="description"
+                autoComplete="description"
+                autoFocus
+                onChange={(event) => inputCourseInfo(event)}
+                 />
+            </Grid>
+            <Grid item xs={12} sm={12}>
+                <TextField
                 type="date"
                 variant="outlined"
                 margin="normal"
                 required
                 fullWidth
-                id="link"
-                name="link"
-                autoComplete="link"
+                id="dateTime"
+                name="dateTime"
+                autoComplete="dateTime"
                 autoFocus
                 onChange={(event) => inputCourseInfo(event)}
                  />

@@ -36,6 +36,7 @@ import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.js";
 // core components/views for RTL layout
 import RTLPage from "views/RTLPage/RTLPage.js";
 import RegisterCourse from "views/RegisterCourse/RegisterCourse";
+import Courses from "views/Courses/Courses";
 
 const dashboardRoutes = [
   {
@@ -84,6 +85,14 @@ const dashboardRoutes = [
     rtlName: "إخطارات",
     icon: Notifications,
     component: RegisterCourse,
+    layout: "/admin",
+  },
+  {
+    path: "/cursos-e-palestras",
+    name: "Cursos e Palestras",
+    rtlName: "إخطارات",
+    icon: Notifications,
+    component: Courses,
     layout: "/admin",
   },
 ];

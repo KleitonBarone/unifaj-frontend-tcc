@@ -34,6 +34,8 @@ export default function Sidebar(props) {
       {routes.map((prop, key) => {
         if(localStorage.getItem("USER_TYPE") == "Estudante" && prop.path == "/cadastrar-curso") {
           return false
+        }else if(localStorage.getItem("USER_TYPE") != "Estudante" && prop.path == "/cursos-e-palestras") {
+          return false
         }else {
           var activePro = " ";
           var listItemClasses;
