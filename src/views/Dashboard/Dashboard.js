@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
 // @material-ui/core
@@ -41,40 +41,57 @@ import {
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
 import { useSelector } from "react-redux";
+import { Button } from "@material-ui/core";
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
+  let [courses,setCourses] = useState([])
   const classes = useStyles();
   const { auth } = useSelector(state=>state)
   console.log(auth.email)
+
+  const getCoursesByInstructor = () => {
+    
+    fetch("https://backend-estudar-tcc.herokuapp.com/courses/instructor/"+localStorage.getItem("USER_ID"),{
+      method: "GET",
+      headers: {'Content-Type': 'application/json'}
+    }).then(response =>response.json().then(data =>{ 
+        console.log(data)
+        setCourses([...data])
+    }))
+  }
+
+  const renderNoCoursesMessages = () => {
+      if(localStorage.getItem("USER_TYPE") == "Estudante") {
+        return <p>Voce não possui inscrição em nenhum curso</p>
+      }
+
+      if(localStorage.getItem("USER_TYPE") == "Instrutor") {
+        return <p>Voce não possui cursos cadastrados</p>
+      }
+  }
+
+  useEffect(() =>{
+
+    if(localStorage.getItem("USER_TYPE") == "Estudante") {
+
+    }else {
+      getCoursesByInstructor()
+    }
+  },[])
+
   return (
     <div>
-      <p>{auth.email}</p>
-      <GridContainer>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="warning" stats icon>
-              <CardIcon color="warning">
-                <VideoCallIcon />
-              </CardIcon>
-              <p className={classes.cardCategory}>Used Space</p>
-              <h3 className={classes.cardTitle}>
-                49/50 <small>GB</small>
-              </h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Danger>
-                  <Warning />
-                </Danger>
-                <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                  Get more space
-                </a>
-              </div>
-            </CardFooter>
+        <GridItem xs={12} sm={12} md={4}>
+          <Card profile>
+            <CardBody profile>
+              <h5 className={classes.cardCategory}>Olá</h5>
+              <h3 className={classes.cardTitle}>{localStorage.getItem("USER_TYPE")} {localStorage.getItem("USERNAME")}</h3>
+            </CardBody>
           </Card>
         </GridItem>
+      <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
             <CardHeader color="success" stats icon>
@@ -109,25 +126,37 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <Accessibility />
-              </CardIcon>
-              <p className={classes.cardCategory}>Followers</p>
-              <h3 className={classes.cardTitle}>+245</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
       </GridContainer>
       <GridContainer>
+        
+        { courses.length != 0 ? (
+              courses.map(course =>{
+                return(<GridItem xs={12} sm={6} md={3}>
+                <Card>
+                  <CardHeader color="info" stats icon>
+                    <CardIcon color="info">
+                    <VideoCallIcon />
+                    </CardIcon>
+                    <p className={classes.cardCategory}>{course["dateTime"]}</p>
+                    <h3 className={classes.cardTitle}>{course["name"]}</h3>
+                  </CardHeader>
+                  <CardFooter stats>
+                    <div className={classes.stats}>
+                      <Update />
+                      <Button>
+                        <a href={course["link"]} target="_blank">Ir para seção</a>
+                      </Button>
+                    </div>
+                  </CardFooter>
+                </Card>
+              </GridItem>)
+          })) : (
+           renderNoCoursesMessages()          
+          )
+        }
+      </GridContainer>
+
+      {/* <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
           <Card chart>
             <CardHeader color="success">
@@ -265,7 +294,7 @@ export default function Dashboard() {
             </CardBody>
           </Card>
         </GridItem>
-      </GridContainer>
+      </GridContainer> */}
     </div>
   );
 }

@@ -79,7 +79,7 @@ export default function RegisterCourse() {
   const handlerRegisterCourse = (e) => {
     e.preventDefault()
     
-    fetch("http://localhost:3001/courses/"+localStorage.getItem("EMAIL"),{
+    fetch("https://backend-estudar-tcc.herokuapp.com/courses/"+localStorage.getItem("USER_ID"),{
       method: "POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(courseInfo)
