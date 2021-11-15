@@ -21,6 +21,7 @@ import Person from "@material-ui/icons/Person";
 import LibraryBooks from "@material-ui/icons/LibraryBooks";
 import BubbleChart from "@material-ui/icons/BubbleChart";
 import LocationOn from "@material-ui/icons/LocationOn";
+//import AddTaskIcon from '@mui/icons-material/AddTask';
 import Notifications from "@material-ui/icons/Notifications";
 import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
@@ -36,6 +37,7 @@ import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.js";
 // core components/views for RTL layout
 import RTLPage from "views/RTLPage/RTLPage.js";
 import RegisterCourse from "views/RegisterCourse/RegisterCourse";
+import RegisterTask from "views/RegisterTask/RegisterTask";
 import Courses from "views/Courses/Courses";
 
 const dashboardRoutes = [
@@ -48,50 +50,26 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/user",
-    name: "User Profile",
-    rtlName: "ملف تعريفي للمستخدم",
-    icon: Person,
-    component: UserProfile,
-    layout: "/admin",
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    rtlName: "قائمة الجدول",
-    icon: "content_paste",
-    component: TableList,
-    layout: "/admin",
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    rtlName: "طباعة",
-    icon: LibraryBooks,
-    component: Typography,
-    layout: "/admin",
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    rtlName: "إخطارات",
-    icon: Notifications,
-    component: NotificationsPage,
-    layout: "/admin",
-  },
-  {
     path: "/cadastrar-curso",
     name: "Cadastrar Curso",
     rtlName: "إخطارات",
-    icon: Notifications,
+    icon: LibraryBooks,
     component: RegisterCourse,
+    layout: "/admin",
+  },
+  {
+    path: "/cadastrar-atividades",
+    name: "Cadastrar atividades",
+    rtlName: "إخطارات",
+    icon: LibraryBooks,
+    component: RegisterTask,
     layout: "/admin",
   },
   {
     path: "/cursos-e-palestras",
     name: "Cursos e Palestras",
     rtlName: "إخطارات",
-    icon: Notifications,
+    icon: LibraryBooks,
     component: Courses,
     layout: "/admin",
   },
