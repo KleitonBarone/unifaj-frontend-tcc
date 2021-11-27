@@ -62,6 +62,18 @@ export default function Dashboard() {
     }))
   }
 
+
+  const getCoursesByStudent = () => {
+    
+    fetch("https://backend-estudar-tcc.herokuapp.com/courses/student/"+localStorage.getItem("USER_ID"),{
+      method: "GET",
+      headers: {'Content-Type': 'application/json'}
+    }).then(response =>response.json().then(data =>{ 
+        console.log(data)
+        setCourses([...data])
+    }))
+  }
+
   const renderNoCoursesMessages = () => {
       if(localStorage.getItem("USER_TYPE") == "Estudante") {
         return <p>Voce não possui inscrição em nenhum curso</p>
@@ -75,7 +87,7 @@ export default function Dashboard() {
   useEffect(() =>{
 
     if(localStorage.getItem("USER_TYPE") == "Estudante") {
-
+      getCoursesByStudent()
     }else {
       getCoursesByInstructor()
     }

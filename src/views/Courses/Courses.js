@@ -8,6 +8,10 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
+<<<<<<< HEAD
+=======
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+>>>>>>> f3a30f8a3f6dccd633f566f6ccf39ce8fe6e43c1
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -78,8 +82,28 @@ export default function Courses() {
       headers: {'Content-Type': 'application/json'}
     }).then(response =>response.json().then(data =>{ 
         console.log(data)
+
+        data.forEach((course,i) => {
+            course.students.forEach(student =>{
+              if(student.id == localStorage.getItem("USER_ID")) {
+                data.splice(i,1)
+              }
+            })
+        })
+
+        console.log(data)
         setCourses([...data])
     }))
+  }
+
+  const subscription = (courseId) =>{
+    console.log(courseId)
+    fetch(`https://backend-estudar-tcc.herokuapp.com/courses/subscription/${courseId}/student/${localStorage.getItem("USER_ID")}`,{
+      method: "POST",
+      headers: {'Content-Type': 'application/json'}
+    }).then(data =>{
+      getCourses()
+    })
   }
 
   useEffect(() =>{
@@ -94,9 +118,16 @@ export default function Courses() {
               return(<GridItem xs={12} sm={6} md={4}>
               <Card>
                 <CardHeader color="info" stats icon>
+                  <div style={{width:"100%",display:"flex", justifyContent:"flex-start"}}>
                   <CardIcon color="info">
                   <VideoCallIcon />
                   </CardIcon>
+                  <Button onClick={() => subscription(course["id"])}>
+                    <CardIcon color="info">
+                    <AddCircleIcon />
+                    </CardIcon>
+                  </Button>
+                  </div>
                   <p className={classes.cardCategory} style={{color:"black", fontSize: 17}}>{course["dateTime"]}</p>
                   <h3 className={classes.cardTitle} style={{color:"black"}}>{course["name"]}</h3>
                 </CardHeader>
