@@ -115,24 +115,17 @@ export default function Courses() {
               return(<GridItem xs={12} sm={6} md={4}>
               <Card>
                 <CardHeader color="info" stats icon>
-                  <div style={{width:"100%",display:"flex", justifyContent:"flex-start"}}>
                   <CardIcon color="info">
                   <VideoCallIcon />
                   </CardIcon>
-                  <Button onClick={() => subscription(course["id"])}>
-                    <CardIcon color="info">
-                    <AddCircleIcon />
-                    </CardIcon>
-                  </Button>
-                  </div>
-                  <p className={classes.cardCategory} style={{color:"black", fontSize: 17}}>{course["dateTime"]}</p>
+                  <p className={classes.cardCategory} style={{color:"black", fontSize: 17}}>{"Data de inicio: " + new Date(course["dateTime"]).getDay() + "/" + new Date(course["dateTime"]).getMonth() + "/" + new Date(course["dateTime"]).getFullYear()}</p>
                   <h3 className={classes.cardTitle} style={{color:"black"}}>{course["name"]}</h3>
                 </CardHeader>
                 <CardFooter stats>
                   <div className={classes.stats}>
                     <Update />
-                    <Button>
-                      <a href={course["link"]} target="_blank">Ir para seção</a>
+                    <Button onClick={() => subscription(course["id"])}>
+                      inscrever-se
                     </Button>
                   </div>
                 </CardFooter>

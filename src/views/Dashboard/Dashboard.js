@@ -47,6 +47,8 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   let [courses,setCourses] = useState([])
+  let [coursesInscriptis,setCoursesInscriptis] = useState(0)
+  let [studentsInscriptis,setStudentsInscriptis] = useState(0)
   const classes = useStyles();
   const { auth } = useSelector(state=>state)
   console.log(auth.email)
@@ -58,7 +60,17 @@ export default function Dashboard() {
       headers: {'Content-Type': 'application/json'}
     }).then(response =>response.json().then(data =>{ 
         console.log(data)
+        setCoursesInscriptis(data.length)
         setCourses([...data])
+
+        let studentsInscripts = 0
+        data.forEach(d =>{
+          console.log(d["students"].length)
+          setStudentsInscriptis(studentsInscripts + d["students"].length)
+          console.log(studentsInscriptis)
+        })
+        console.log(studentsInscriptis)
+        
     }))
   }
 
@@ -85,7 +97,7 @@ export default function Dashboard() {
   }
 
   useEffect(() =>{
-
+    console.log(localStorage.getItem("USER_ID"))
     if(localStorage.getItem("USER_TYPE") == "Estudante") {
       getCoursesByStudent()
     }else {
@@ -110,13 +122,12 @@ export default function Dashboard() {
               <CardIcon color="success">
                 <Store />
               </CardIcon>
-              <p className={classes.cardCategory}>Revenue</p>
-              <h3 className={classes.cardTitle}>$34,245</h3>
+              <h3 className={classes.cardTitle}>{studentsInscriptis}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
                 <DateRange />
-                Last 24 Hours
+                Alunos inscritos
               </div>
             </CardFooter>
           </Card>
@@ -127,13 +138,12 @@ export default function Dashboard() {
               <CardIcon color="danger">
                 <YouTubeIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>Fixed Issues</p>
-              <h3 className={classes.cardTitle}>75</h3>
+              <h3 className={classes.cardTitle}>{coursesInscriptis}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
                 <LocalOffer />
-                Tracked from Github
+                Cursos e palestras cadastrados
               </div>
             </CardFooter>
           </Card>
@@ -149,7 +159,8 @@ export default function Dashboard() {
                     <CardIcon color="info">
                     <VideoCallIcon />
                     </CardIcon>
-                    <p className={classes.cardCategory}>{course["dateTime"]}</p>
+                    {console.log(localStorage.getItem("USER_ID"))}
+                    <p className={classes.cardCategory}>{"Data de inicio: " + new Date(course["dateTime"]).getDay() + "/" + new Date(course["dateTime"]).getMonth() + "/" + new Date(course["dateTime"]).getFullYear() + "às"}</p>
                     <h3 className={classes.cardTitle}>{course["name"]}</h3>
                   </CardHeader>
                   <CardFooter stats>
