@@ -8,10 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import VideoCallIcon from '@material-ui/icons/VideoCall';
-<<<<<<< HEAD
-=======
 import AddCircleIcon from '@material-ui/icons/AddCircle';
->>>>>>> f3a30f8a3f6dccd633f566f6ccf39ce8fe6e43c1
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
