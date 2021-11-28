@@ -69,7 +69,7 @@ export default function RegisterCourse() {
     instructor:{}
   })
 
-  const inputCourseInfo = (event) => {
+  const inputTaskInfo = (event) => {
     if(event.target.name == "category") {
         event.target.value = parseInt(event.target.value)
     }
@@ -84,7 +84,8 @@ export default function RegisterCourse() {
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(courseInfo)
     }).then(response =>response.json().then(data =>{ 
-      history.push('/admin/dashboard')
+      // history.push('/admin/dashboard')
+      console.log(response)
     }))
   }
 
@@ -104,11 +105,11 @@ export default function RegisterCourse() {
                 required
                 fullWidth
                 id="name"
-                label="Titulo"
+                label="Titulo da atividade"
                 name="name"
                 autoComplete="name"
                 autoFocus
-                onChange={(event) => inputCourseInfo(event)}
+                onChange={(event) => inputTaskInfo(event)}
             />
             </Grid>
             <Grid item xs={12} sm={12}>
@@ -122,7 +123,7 @@ export default function RegisterCourse() {
                 name="link"
                 autoComplete="link"
                 autoFocus
-                onChange={(event) => inputCourseInfo(event)}
+                onChange={(event) => inputTaskInfo(event)}
                  />
             </Grid>
             <Grid item xs={12} sm={12}>
@@ -136,7 +137,7 @@ export default function RegisterCourse() {
                 name="description"
                 autoComplete="description"
                 autoFocus
-                onChange={(event) => inputCourseInfo(event)}
+                onChange={(event) => inputTaskInfo(event)}
                  />
             </Grid>
             <Grid item xs={12} sm={12}>
@@ -150,17 +151,17 @@ export default function RegisterCourse() {
                 name="dateTime"
                 autoComplete="dateTime"
                 autoFocus
-                onChange={(event) => inputCourseInfo(event)}
+                onChange={(event) => inputTaskInfo(event)}
                  />
             </Grid>
             <Grid item xs={12}>
               <FormControlLabel
-                control={<Radio value="0" color="primary" name="type" onChange={inputCourseInfo}/>}
+                control={<Radio value="0" color="primary" name="type" onChange={inputTaskInfo}/>}
                 label="Curso"
                 name="category"
               />
               <FormControlLabel
-                control={<Radio value="1" color="primary" name="type" onChange={inputCourseInfo}/>}
+                control={<Radio value="1" color="primary" name="type" onChange={inputTaskInfo}/>}
                 label="Palestra"
                 name="category"
               />

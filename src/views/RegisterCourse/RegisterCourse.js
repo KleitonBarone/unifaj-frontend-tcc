@@ -63,7 +63,7 @@ export default function RegisterCourse() {
   let [errors,setErros] = useState([])
   let [courseInfo,setCourseInfo] = useState({
     name: '',
-    category:0,
+    category:1,
     dateTime:'',
     link:'',
     instructor:{}
@@ -78,14 +78,50 @@ export default function RegisterCourse() {
 
   const handlerRegisterCourse = (e) => {
     e.preventDefault()
+    let hasError = false;
+    setErros([])
+
+    if(courseInfo["name"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"Titulo do curso/palestra deve ser preenchido"}]))
+    }
+
+    if(courseInfo["category"] == '') {
+      hasError = true
+      setErros((state) =>([...state,{value:"Escolha ao menos uma categoria !"}]))
+    }
+
+    if(courseInfo["dateTime"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"A data e hora do curso/palestra deve ser preenchidas"}]))
+    }
+
     
-    fetch("https://backend-estudar-tcc.herokuapp.com/courses/"+localStorage.getItem("USER_ID"),{
-      method: "POST",
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(courseInfo)
-    }).then(response =>response.json().then(data =>{ 
-      history.push('/admin/dashboard')
-    }))
+    if(courseInfo["link"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"O curso/palestra deve conter um link para a aula"}]))
+    }
+
+    
+    if(courseInfo["instructor"].length == 0) {
+      hasError = true
+      setErros((state) =>([...state,{value:"Instrutor não encontrado, por favor faça o logoff e entre novamente no sistema !"}]))
+    }
+    if(!hasError) {
+      fetch("https://backend-estudar-tcc.herokuapp.com/courses/"+localStorage.getItem("USER_ID"),{
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(courseInfo)
+      }).then(response =>response.json().then(data =>{ 
+        if(data != '' || data != null){
+          alert('Curso/Palestra cadastrada com sucesso !')
+          history.push('/admin/dashboard')
+        }else{
+          alert('Erro ao inserir curso !')
+          history.push('/admin/cadastrar-curso')
+        }
+      }))
+    }
   }
 
   return (
@@ -141,7 +177,7 @@ export default function RegisterCourse() {
             </Grid>
             <Grid item xs={12} sm={12}>
                 <TextField
-                type="date"
+                type="datetime-local"
                 variant="outlined"
                 margin="normal"
                 required
@@ -157,11 +193,13 @@ export default function RegisterCourse() {
               <FormControlLabel
                 control={<Radio value="0" color="primary" name="type" onChange={inputCourseInfo}/>}
                 label="Curso"
+                id="categoryC"
                 name="category"
               />
               <FormControlLabel
                 control={<Radio value="1" color="primary" name="type" onChange={inputCourseInfo}/>}
                 label="Palestra"
+                id="categoryP"
                 name="category"
               />
             </Grid>
