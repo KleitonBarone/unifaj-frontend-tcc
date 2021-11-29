@@ -18,6 +18,7 @@ import Code from "@material-ui/icons/Code";
 import Cloud from "@material-ui/icons/Cloud";
 import VideoCallIcon from '@material-ui/icons/VideoCall';
 import YouTubeIcon from '@material-ui/icons/YouTube';
+import Groups from '@material-ui/icons/Group'
 // core components
 import GridItem from "components/Grid/GridItem.js";
 import GridContainer from "components/Grid/GridContainer.js";
@@ -120,7 +121,7 @@ export default function Dashboard() {
           <Card>
             <CardHeader color="success" stats icon>
               <CardIcon color="success">
-                <Store />
+                <Groups />
               </CardIcon>
               <h3 className={classes.cardTitle}>{studentsInscriptis}</h3>
             </CardHeader>
@@ -160,7 +161,7 @@ export default function Dashboard() {
                     <VideoCallIcon />
                     </CardIcon>
                     {console.log(localStorage.getItem("USER_ID"))}
-                    <p className={classes.cardCategory}>{"Data de inicio: " + new Date(course["dateTime"]).getDay() + "/" + new Date(course["dateTime"]).getMonth() + "/" + new Date(course["dateTime"]).getFullYear() + "às"}</p>
+                    <p className={classes.cardCategory}>{"Data de inicio: " + new Date(course["dateTime"]).getDate() + "/" + new Date(course["dateTime"]).getMonth() + "/" + new Date(course["dateTime"]).getFullYear() + " às " + new Date(course["dateTime"]).getHours() + ":" + new Date(course["dateTime"]).getMinutes()}</p>
                     <h3 className={classes.cardTitle}>{course["name"]}</h3>
                   </CardHeader>
                   <CardFooter stats>
