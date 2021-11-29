@@ -116,6 +116,7 @@ export default function Dashboard() {
             </CardBody>
           </Card>
         </GridItem>
+        {auth.userType == "Estudante" ? (
       <GridContainer>
         <GridItem xs={12} sm={6} md={3}>
           <Card>
