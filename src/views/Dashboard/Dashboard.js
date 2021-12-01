@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 // react plugin for creating charts
 import ChartistGraph from "react-chartist";
+import { useHistory } from "react-router-dom";
 // @material-ui/core
 import { makeStyles } from "@material-ui/core/styles";
 import Icon from "@material-ui/core/Icon";
@@ -48,6 +49,7 @@ const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   let [courses,setCourses] = useState([])
+  const history = useHistory()
   let [coursesInscriptis,setCoursesInscriptis] = useState(0)
   let [studentsInscriptis,setStudentsInscriptis] = useState(0)
   const classes = useStyles();
@@ -96,6 +98,11 @@ export default function Dashboard() {
         return <p>Voce não possui cursos cadastrados</p>
       }
   }
+
+  const getDetailsCourse = (courseId) => {
+    history.push("/admin/curso-detalhe/" + courseId)
+  }
+
 
   useEffect(() =>{
     console.log(localStorage.getItem("USER_ID"))
@@ -160,7 +167,7 @@ export default function Dashboard() {
                   <Card>
                     <CardHeader color="info" stats icon>
                       <CardIcon color="info">
-                        <VideoCallIcon />
+                        <VideoCallIcon id="teste" onClick={() => getDetailsCourse(course["id"])} style={{cursor:"pointer"}}/>
                       </CardIcon>
                       {console.log(localStorage.getItem("USER_ID"))}
                       <p className={classes.cardCategory}>{"Data de inicio: " + new Date(course["dateTime"]).getDate() + "/" + new Date(course["dateTime"]).getMonth() + "/" + new Date(course["dateTime"]).getFullYear() + " às " + new Date(course["dateTime"]).getHours() + ":" + new Date(course["dateTime"]).getMinutes()}</p>

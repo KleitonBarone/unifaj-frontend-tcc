@@ -39,6 +39,11 @@ export default function Sidebar(props) {
         }else {
           var activePro = " ";
           var listItemClasses;
+
+          if (prop.path === "/curso-detalhe") {
+            return false
+          }
+          
           if (prop.path === "/upgrade-to-pro") {
             activePro = classes.activePro + " ";
             listItemClasses = classNames({

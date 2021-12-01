@@ -39,6 +39,7 @@ import RTLPage from "views/RTLPage/RTLPage.js";
 import RegisterCourse from "views/RegisterCourse/RegisterCourse";
 import RegisterTask from "views/RegisterTask/RegisterTask";
 import Courses from "views/Courses/Courses";
+import CourseDetails from "views/Courses/CourseDetails";
 
 const dashboardRoutes = [
   {
@@ -79,6 +80,14 @@ const dashboardRoutes = [
     rtlName: "إخطارات",
     icon: Notifications,
     component: Courses,
+    layout: "/admin",
+  },
+  {
+    path: "/curso-detalhe/:id",
+    name: "Detalhe curso",
+    rtlName: "إخطارات",
+    icon: Notifications,
+    component: CourseDetails,
     layout: "/admin",
   },
 ];
