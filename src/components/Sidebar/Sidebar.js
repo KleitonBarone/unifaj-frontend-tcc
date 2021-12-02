@@ -43,6 +43,10 @@ export default function Sidebar(props) {
           if (prop.path === "/curso-detalhe") {
             return false
           }
+
+          if (prop.path.includes("/curso-detalhe/")) {
+            return false
+          }
           
           if (prop.path === "/upgrade-to-pro") {
             activePro = classes.activePro + " ";

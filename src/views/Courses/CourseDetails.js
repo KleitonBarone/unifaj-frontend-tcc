@@ -77,6 +77,7 @@ export default function CourseDetails(props) {
   const history = useHistory();
   const dispatch = useDispatch()
   const state = useSelector(state=>state)
+  let taskCards = ""
 
   let [course,setCourse] = useState({
       id:"",
@@ -89,27 +90,330 @@ export default function CourseDetails(props) {
           firstName:"",
           lastName:"",
           email:""
-      }
+      },
+      tasks:[]
   })
 
+  let [task,setTask] = useState({
+    name:"",
+    A:"",
+    B:"",
+    C:"",
+    D:"",
+    responseQuestion:"",
+    courseId:0
+  })
+
+  let [studentResponse,setStudentResponse] = useState({
+    response:"",
+    studentId:0,
+    taskId:0
+  })
+
+  let [tasks,setTasks] = useState([])
+
+  const handleTask = (e) =>{
+    setTask({
+      ...task,
+      [e.target.name]:e.target.value
+    })
+  }
+
+  const registerTask = () => {
+    task.courseId = parseInt(props.match.params.id)
+    console.log(task)
+    fetch("https://backend-estudar-tcc.herokuapp.com/tasks/course/" + props.match.params.id, {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(task)
+    }).then(data => {
+        getCourse()
+    })
+  }
+
+  const getCourse = () => {
+    task.courseId = parseInt(props.match.params.id)
+    fetch("https://backend-estudar-tcc.herokuapp.com/courses/"+ props.match.params.id,{
+      method: "GET",
+      headers: {'Content-Type': 'application/json'}
+    }).then(response =>response.json().then(data =>{ 
+        console.log(data)
+
+        if(data["category"] == 0) {
+            data["category"] = "Curso"
+        }else {
+          data["category"] = "Palestra"
+        }
+        setCourse({...data})
+        getTasks()
+        console.log(course["name"])
+    }))
+  }
+
+  const handleResponse = (e) =>{
+    setStudentResponse({
+      ...studentResponse,
+      [e.target.name]:e.target.value
+    })
+  }
+
+  const registerResponse = (task_id) =>{
+    console.log(task_id)
+      fetch("https://backend-estudar-tcc.herokuapp.com/studentResponses/student/"+ localStorage.getItem("USER_ID") + "/task/" + task_id,{
+        method: "POST",
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(studentResponse)
+      }).then(response =>response.json().then(data =>{ 
+          getTasks()
+      })).catch(c => {
+        setStudentResponse({
+          ...studentResponse,
+          response:""
+        })
+
+        setTasks([])
+        getTasks()
+      })
+  }
+
+  const getTaskCards = () => {
+    console.log("VAAAAAAAAAAAi")
+    console.log(tasks.length)
+    if(localStorage.getItem("USER_TYPE") == "Estudante") {
+      
+      return tasks.map(task =>{
+        return task["userResponse"] != null ? (
+          <Card>
+          <CardHeader style={{backgroundColor: task["userResponse"] == task["responseQuestion"] ? "green" : "red",color:"white",fontWeight:"bold"}}>
+            <h4 className={classes.cardTitleWhite}>{
+              task["userResponse"] == task["responseQuestion"] ? "Correto" : "Errado"
+            }</h4>
+        </CardHeader>
+        <CardBody>
+        <GridContainer>
+            <GridItem xs={12} sm={12} md={4}>
+              <TextField style={{width:"100%"}}
+                        label="Titulo atividade"
+                        name="name"
+                        value={task.name}
+                      />
+            </GridItem>
+            <GridItem xs={12} sm={12} md={12}>
+                <h4 className={classes.cardTitleWhite}>Alternativas</h4>
+                  <GridItem xs={12} sm={12} md={3}>
+                      <TextField label="A" style={{width:"100%"}} 
+                        name="A"
+                        value={task.A}
+                        onChange={(e) => handleTask(e)}
+                      />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                      <TextField label="B" style={{width:"100%"}} 
+                          name="B"
+                          value={task.B}
+                          onChange={(e) => handleTask(e)}
+                      />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                      <TextField label="C" style={{width:"100%"}} 
+                          name="C"
+                          value={task.C}
+                          onChange={(e) => handleTask(e)}
+                      />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                      <TextField label="D" style={{width:"100%"}} 
+                          name="D"
+                          value={task.D}
+                          onChange={(e) => handleTask(e)}
+                      />
+                  </GridItem>
+              </GridItem>
+              </GridContainer>
+              </CardBody>
+              </Card>
+          ) : (
+              <Card>
+              <CardBody>
+              <GridContainer>
+                  <GridItem xs={12} sm={12} md={4}>
+                    <TextField style={{width:"100%"}}
+                              label="Titulo atividade"
+                              name="name"
+                              value={task.name}
+                            />
+                  </GridItem>
+                  <GridItem xs={12} sm={12} md={12}>
+                      <h4 className={classes.cardTitleWhite}>Alternativas</h4>
+                        <GridItem xs={12} sm={12} md={3}>
+                            <TextField label="A" style={{width:"100%"}} 
+                              name="A"
+                              value={task.A}
+                              onChange={(e) => handleTask(e)}
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={3}>
+                            <TextField label="B" style={{width:"100%"}} 
+                                name="B"
+                                value={task.B}
+                                onChange={(e) => handleTask(e)}
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={3}>
+                            <TextField label="C" style={{width:"100%"}} 
+                                name="C"
+                                value={task.C}
+                                onChange={(e) => handleTask(e)}
+                            />
+                        </GridItem>
+                        <GridItem xs={12} sm={12} md={3}>
+                            <TextField label="D" style={{width:"100%"}} 
+                                name="D"
+                                value={task.D}
+                                onChange={(e) => handleTask(e)}
+                            />
+                        </GridItem>
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                            <TextField label="Resposta do aluno" style={{width:"100%"}} 
+                                name="response"
+                                value={studentResponse.response}
+                                onChange={(e) => handleResponse(e)}
+                            />
+                    </GridItem>
+                  </GridContainer>
+                  <Button onClick={() => registerResponse(task.id)}>
+                     Responder
+                  </Button>
+                </CardBody>
+              </Card>
+          )
+      })     
+    } else {
+      return tasks.map(task =>(
+        <Card>
+          <CardBody>
+          <GridContainer>
+              <GridItem xs={12} sm={12} md={4}>
+                <TextField style={{width:"100%"}}
+                          label="Titulo atividade"
+                          name="name"
+                          value={task.name}
+                        />
+              </GridItem>
+              <GridItem xs={12} sm={12} md={12}>
+                  <h4 className={classes.cardTitleWhite}>Alternativas</h4>
+                    <GridItem xs={12} sm={12} md={3}>
+                        <TextField label="A" style={{width:"100%"}} 
+                          name="A"
+                          value={task.A}
+                          onChange={(e) => handleTask(e)}
+                        />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                        <TextField label="B" style={{width:"100%"}} 
+                            name="B"
+                            value={task.B}
+                            onChange={(e) => handleTask(e)}
+                        />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                        <TextField label="C" style={{width:"100%"}} 
+                            name="C"
+                            value={task.C}
+                            onChange={(e) => handleTask(e)}
+                        />
+                    </GridItem>
+                    <GridItem xs={12} sm={12} md={3}>
+                        <TextField label="D" style={{width:"100%"}} 
+                            name="D"
+                            value={task.D}
+                            onChange={(e) => handleTask(e)}
+                        />
+                    </GridItem>
+                </GridItem>
+                  <GridItem xs={12} sm={12} md={3}>
+                          <TextField label="Resposta" style={{width:"100%"}} 
+                              name="reponseQuestion"
+                              value={task.responseQuestion}
+                              onChange={(e) => handleTask(e)}
+                          />
+                  </GridItem>
+                </GridContainer>
+                </CardBody>
+        </Card>
+      ))     
+    }
+  }
+
+  const getTasks = () =>{
+    console.log("gfsdgdf")
+    if(localStorage.getItem("USER_TYPE") == "Estudante") {
+      console.log(course.tasks)
+      course.tasks.forEach(task => {
+        console.log(task)
+        getTaskResponseByStudent(task.id).then(
+          data => {
+            data.json().then(responseData =>{
+                setTasks((prevTasks) => [...prevTasks,{
+                  id:task.id,
+                  name:task.name,
+                  A:task.A,
+                  B:task.B,
+                  C:task.C,
+                  D:task.D,
+                  responseQuestion:task.responseQuestion,
+                  userResponse: responseData["response"]
+                }])
+            }).catch(c => {
+              console.log(task)
+                setTasks((prevTasks) => [...prevTasks,{
+                  id:task.id,
+                  name:task.name,
+                  A:task.A,
+                  B:task.B,
+                  C:task.C,
+                  D:task.D,
+                  responseQuestion:task.responseQuestion,
+                  userResponse: null
+                }])
+            })
+          }
+        )
+      })
+    } else {
+      console.log(course.tasks)
+      course.tasks.forEach(task =>{
+        setTasks((prevTasks) => [...prevTasks,task])
+      })
+    }
+  }
+  const getTaskResponseByStudent = (task_id) => {
+    return fetch("https://backend-estudar-tcc.herokuapp.com/studentResponses/task/"+ task_id + "/student/" + localStorage.getItem("USER_ID")  ,{
+      method: "GET",
+      headers: {'Content-Type': 'application/json'}
+    })
+  }
+
   useEffect(() =>{
-      console.log(props.match.params.id)
       fetch("https://backend-estudar-tcc.herokuapp.com/courses/"+ props.match.params.id,{
         method: "GET",
         headers: {'Content-Type': 'application/json'}
       }).then(response =>response.json().then(data =>{ 
-          console.log(data)
-
           if(data["category"] == 0) {
               data["category"] = "Curso"
           }else {
             data["category"] = "Palestra"
           }
           setCourse({...data})
-          console.log(course["name"])
       }))
 
   },[])
+
+  useEffect(() =>{
+    setTasks([])
+    getTasks()
+  },[course.tasks])
 
 
   return (
@@ -160,6 +464,71 @@ export default function CourseDetails(props) {
               <Button color="primary"><a href={course["link"]} target="_blank">Ir para seção</a></Button>
             </CardFooter>
           </Card>
+          {localStorage.getItem("USER_TYPE") == "Instrutor" ? (
+              <Card>
+                  <CardHeader style={{backgroundColor: "#f50057",color:"white",fontWeight:"bold"}}>
+                    <h4 className={classes.cardTitleWhite}>Cadastrar atividade</h4>
+                  </CardHeader>
+                  <CardBody>
+                  <GridContainer>
+                      <GridItem xs={12} sm={12} md={12}>
+                          <TextField style={{width:"100%"}}
+                            label="Titulo atividade"
+                            name="name"
+                            value={task.name}
+                            onChange={(e) => handleTask(e)}
+                          />
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={12}>
+                        <h4 className={classes.cardTitleWhite}>Alternativas</h4>
+                          <GridItem xs={12} sm={12} md={3}>
+                              <TextField label="A" style={{width:"100%"}} 
+                                name="A"
+                                value={task.A}
+                                onChange={(e) => handleTask(e)}
+                              />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={3}>
+                              <TextField label="B" style={{width:"100%"}} 
+                                  name="B"
+                                  value={task.B}
+                                  onChange={(e) => handleTask(e)}
+                              />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={3}>
+                              <TextField label="C" style={{width:"100%"}} 
+                                  name="C"
+                                  value={task.CardFooter}
+                                  onChange={(e) => handleTask(e)}
+                              />
+                          </GridItem>
+                          <GridItem xs={12} sm={12} md={3}>
+                              <TextField label="D" style={{width:"100%"}} 
+                                  name="D"
+                                  value={task.D}
+                                  onChange={(e) => handleTask(e)}
+                              />
+                          </GridItem>
+                      </GridItem>
+                      <GridItem xs={12} sm={12} md={12}>
+                          <TextField label="Resposta" style={{width:"100%", marginTop:"4%"}} 
+                                  name="responseQuestion"
+                                  value={task.responseQuestion}
+                                  onChange={(e) => handleTask(e)}
+                          />
+                      </GridItem>
+                    </GridContainer>
+                    <Button style={{backgroundColor:"#f50057", color:"white", fontWeight:"bold",marginTop:"4%"}} onClick={registerTask}>
+                      Cadastrar
+                    </Button>
+                  </CardBody>
+            </Card>
+          ):(
+            null
+          )}
+          {
+            getTaskCards()
+          }
         </GridItem>
         <GridItem xs={12} sm={12} md={4}>
           <Card profile>
